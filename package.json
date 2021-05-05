@@ -7,9 +7,11 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "dom-to-image": "^2.6.0",
     "moveable": "^0.24.6",
     "uuid": "^8.3.2",
-    "vue": "^3.0.5"
+    "vue": "^3.0.5",
+    "vuedraggable": "^4.0.1"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^1.2.2",
