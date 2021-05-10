@@ -1,23 +1,24 @@
 <template>
   <main id="editor-container" class="w-screen h-screen bg-gray-100 pt-20">
-    
-    <section id="current-page" class="bg-white mx-auto shadow-sm relative" style="width:480px; height:756px;">
-      <div id="current-page-content" class="w-full h-full">
-        <div 
-        v-for="element in pageElements" 
-        :key="element.key" 
-        :data-uuid="element.key" 
-        @pointerdown="setMe(element.key)"
-        class="absolute"  
-        :style="element.rect"
-        >
-          <img v-if="element.type == 'image'" :src="element.content" class="w-full h-full object-contain">
-          <div v-if="element.type == 'text'" @dblclick="textDbclick" class="table w-full h-full">
-            <div class="table-cell">{{element.content}}</div>
+    <section class="h-full w-full" @click.stop.passive.capture="clearSelect">
+      <div id="current-page" class="bg-white mx-auto shadow-sm relative" style="width:480px; height:756px;">
+        <div id="current-page-content" class="w-full h-full">
+          <div 
+          v-for="element in pageElements" 
+          :key="element.key" 
+          :data-uuid="element.key" 
+          @pointerdown="setMe(element.key)"
+          class="editable-element absolute"  
+          :style="element.rect"
+          >
+            <img v-if="element.type == 'image'" :src="element.content" class="w-full h-full object-contain">
+            <div v-if="element.type == 'text'" @dblclick="textDbclick" class="table w-full h-full">
+              <div class="table-cell">{{element.content}}</div>
+            </div>
           </div>
         </div>
+        <!-- <div  class="absolute" @pointerdown="setMe($event, '1231')">OMG</div> -->
       </div>
-      <!-- <div  class="absolute" @pointerdown="setMe($event, '1231')">OMG</div> -->
     </section>
 
     <section id="menubar"></section>
@@ -107,16 +108,17 @@
             </svg>
           </a>
         </li> -->
-        <li class="hover:bg-gray-300 relative"  title="Info - Layers">
+        <li class="hover:bg-gray-300 relative"  title="Info - Layers"   v-click-outside="closeLayers">
+
           <a 
-          @click.prevent="toggleLayers"
+          @click.prevent="openLayers"
           href="#" 
           class="h-12 px-3 flex justify-center items-center w-full focus:text-orange-500">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
             </svg>
           </a>
-          <div v-if="isLayersOpened" class="w-40 bg-gray-200 absolute right-0 top-0 mr-12">
+          <div v-if="isLayersOpened" class="w-40 bg-gray-200 absolute right-0 top-0 mr-12" >
             <ul class="">
               <li 
               v-for="element in pageElements" 
@@ -357,8 +359,15 @@ moveable.on("resizeStart", ({ target, clientX, clientY }) => {
 
     };
 
-    const clearSelect = () => {
-      moveable.target = null;
+    const clearSelect = ($event) => {
+      if (!$event) {
+        moveable.target = null;
+        return;
+      }
+      let isContain = ![...document.querySelectorAll('.editable-element')].some(s=>s.contains($event.target));
+      if (isContain) {
+        moveable.target = null;
+      }
     };
 
     const togglePosition = () => {
@@ -367,6 +376,12 @@ moveable.on("resizeStart", ({ target, clientX, clientY }) => {
 
     const toggleLayers = () => {
       isLayersOpened.value = !isLayersOpened.value;
+    };
+    const openLayers = () => {
+      isLayersOpened.value = true;
+    };
+    const closeLayers = () => {
+      isLayersOpened.value = false;
     };
 
     const toggleAnimations = () => {
@@ -583,6 +598,9 @@ const textDbclick = (event) => {
       addImage,
       removeSelected,
       exportData,
+
+openLayers,
+closeLayers,
 
       textDbclick
     }
