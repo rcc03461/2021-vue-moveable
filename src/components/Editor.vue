@@ -31,11 +31,11 @@
       <div v-for="(page, index) in pages" :key="page.key" class="mx-5 my-3 border-blue-500" :class="{'border-l-2':currentPageIndex == index}" >
           <img :src="page.info.cover" alt="" class="w-32 hover:shadow-lg cursor-pointer"  @click.prevent="selectPage(index)">
       </div>
-
-
-
     </section>
-    <section id="infobar" class="fixed top-48 right-5 flex-col bg-gray-200">
+    <section id="editbar" class="fixed w-72 top-0 right-0 h-screen shadow-xs bg-gray-200">
+      
+    </section>
+    <section id="infobar" class="fixed top-0 right-72 flex-col bg-gray-200  shadow-xs">
       <ul>
 			  <!-- Items Section -->
         <li class="hover:bg-gray-300" title="Clear Selected">
