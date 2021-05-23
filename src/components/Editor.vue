@@ -1,6 +1,6 @@
 <template>
   <main id="editor-container" class="w-screen h-screen bg-gray-100 pt-20">
-    <section class="h-full w-full" @click.stop.passive.capture="clearSelect">
+    <section class="h-full w-full" @click.passive.capture="clearSelect">
       <div id="current-page" class="bg-white mx-auto shadow-sm relative" style="width:480px; height:756px;">
         <div id="current-page-content" class="w-full h-full">
           <div 
@@ -197,7 +197,8 @@
 </template>
 
 <script lang="ts">
-import { ref, reactive, defineComponent , onMounted, nextTick } from 'vue';;
+import { ref, reactive, defineComponent , onMounted, nextTick } from 'vue';
+import { useStore } from 'vuex'
 import Moveable from "moveable";
 import { v4 as uuidv4 } from 'uuid';
 import domtoimage from 'dom-to-image';
@@ -218,7 +219,7 @@ export default defineComponent({
   setup: () => {
 
 
-
+    const store = useStore();
 
 
     const pages = ref(null);
